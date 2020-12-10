@@ -15,13 +15,13 @@ from .errors import ValidationError
 # }
 
 
-def validate_input(validation_config, data):
+def validate_input(validation_config, data, check_required=True):
     """Validates `data` based on the validation config"""
 
     for key in validation_config:
         config = validation_config[key]
 
-        if config.get('required', False) and key not in data:
+        if check_required and config.get('required', False) and key not in data:
             raise ValidationError(f'{key} is required')
 
         if key in data:

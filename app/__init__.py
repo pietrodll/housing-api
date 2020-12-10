@@ -33,6 +33,9 @@ def create_app(test_config=None):
 
     jwt = JWT(app, auth.authenticate, auth.identity)
 
+    from .routes import user
+    app.register_blueprint(user.bp)
+
     app.register_error_handler(APIError, APIError.to_json)
 
     return app

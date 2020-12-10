@@ -67,6 +67,20 @@ class User(Entity):
             'birth_date': self.birth_date.isoformat()
         })
 
+    def update_from_json(self, data: dict):
+        """Updates the user according to a dictionary"""
+
+        validate_input(USER_VALIDATION, data, check_required=False)
+
+        if 'last_name' in data:
+            self.last_name = data['last_name']
+
+        if 'first_name' in data:
+            self.first_name = data['first_name']
+
+        if 'birth_date' in data:
+            self.birth_date = datetime.fromisoformat(data['birth_date'])
+
 
 class UserModel(Model, metaclass=SingletonMeta):
     collection_name = 'users'

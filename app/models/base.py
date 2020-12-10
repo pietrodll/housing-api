@@ -2,8 +2,10 @@
 
 from abc import ABCMeta, abstractmethod, abstractstaticmethod
 from bson import ObjectId
+from pymongo import ReturnDocument
 from ..utils.various import SingletonMeta
 from ..db import DBClient
+
 
 class Entity(metaclass=ABCMeta):
     """Class representing an entity"""
@@ -15,6 +17,10 @@ class Entity(metaclass=ABCMeta):
     @abstractmethod
     def to_json(self):
         """Returns a valid Flask response"""
+
+    @abstractmethod
+    def update_from_json(self, data: dict):
+        """Updates the entity from a dictionary"""
 
 
 class Model(metaclass=SingletonMeta):
@@ -45,3 +51,12 @@ class Model(metaclass=SingletonMeta):
 
         result = self.collection.insert_one(rec)
         return result
+
+    def replace(self, entity):
+        updated = self.collection.find_one_and_replace(
+            {'_id': ObjectId(entity.id)},
+            self.from_entity(entity),
+            return_document=ReturnDocument.AFTER
+        )
+
+        return self.to_entity(updated)
