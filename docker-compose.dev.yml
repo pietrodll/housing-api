@@ -1,0 +1,7 @@
+version: '3.7'
+services:
+  database:
+    image: mongo
+    env_file: ./database/.env.development
+    ports:
+      - "27017:27017"
