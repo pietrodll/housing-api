@@ -36,6 +36,9 @@ def create_app(test_config=None):
     from .routes import user
     app.register_blueprint(user.bp)
 
+    from .routes import house
+    app.register_blueprint(house.bp)
+
     app.register_error_handler(APIError, APIError.to_json)
 
     return app

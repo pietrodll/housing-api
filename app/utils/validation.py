@@ -18,6 +18,9 @@ from .errors import ValidationError
 def validate_input(validation_config, data, check_required=True):
     """Validates `data` based on the validation config"""
 
+    if type(data) != dict:
+        raise ValidationError('data must be JSON')
+
     for key in validation_config:
         config = validation_config[key]
 

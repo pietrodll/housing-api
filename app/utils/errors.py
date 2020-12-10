@@ -32,3 +32,10 @@ class NotFoundError(APIError):
 
     status_code = 404
     error_name = 'NOT_FOUND_ERROR'
+
+
+class ForbiddenError(APIError):
+    """This exception is raised when users try to access forbidden resources"""
+
+    status_code = 403
+    error_name = 'FORBIDDEN_ERROR'

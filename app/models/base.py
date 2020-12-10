@@ -4,6 +4,7 @@ from abc import ABCMeta, abstractmethod, abstractstaticmethod
 from bson import ObjectId
 from pymongo import ReturnDocument
 from ..utils.various import SingletonMeta
+from ..utils.errors import NotFoundError
 from ..db import DBClient
 
 
@@ -44,6 +45,10 @@ class Model(metaclass=SingletonMeta):
         """Gets an entity by ID"""
 
         record = self.collection.find_one(ObjectId(id))
+
+        if record is None:
+            raise NotFoundError(f'Cannot find entity with id {id}')
+
         return self.to_entity(record)
 
     def insert(self, entity):
@@ -60,3 +65,11 @@ class Model(metaclass=SingletonMeta):
         )
 
         return self.to_entity(updated)
+
+    def list(self):
+        records = self.collection.find()
+
+        if records is None:
+            return []
+
+        return list(map(self.to_entity, records))
